@@ -1,0 +1,18 @@
+This patch minimally back-ports Pat Thoyts fix for AMD64 VC9+
+
+See http://core.tcl.tk/tk/info/f7dd6e6f850e9770 for the original commit.
+
+diff -Naur a/win/makefile.vc b/win/makefile.vc
+--- a/win/makefile.vc	2013-06-03 18:29:09.000000000 +0100
++++ b/win/makefile.vc	2016-06-19 20:21:09.261882900 +0100
+@@ -434,8 +434,10 @@
+ # Avoid 'unresolved external symbol __security_cookie' errors.
+ # c.f. http://support.microsoft.com/?id=894573
+ !if "$(MACHINE)" == "IA64" || "$(MACHINE)" == "AMD64"
++!if $(VCVERSION) > 1399 && $(VCVERSION) < 1500
+ baselibs   = $(baselibs) bufferoverflowU.lib
+ !endif
++!endif
+ guilibs	  = $(baselibs) shell32.lib gdi32.lib comdlg32.lib winspool.lib imm32.lib comctl32.lib
+ 
+ 

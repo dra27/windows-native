@@ -1,0 +1,33 @@
+opam-version: "2.0"
+descr: """
+Tcl/Tk Library and Shell
+"""
+authors: ["John Ousterhout" "Tcl Core Team"]
+maintainer: "David Allsopp <david.allsopp@metastack.com>"
+bug-reports: "https://github.com/ocaml/windows-native/issues"
+dev-repo: "http://core.tcl.tk"
+homepage: "http://tcl.tk"
+depends: "compiler"
+available: os = "win32"
+build: [
+  ["./build.sh" version compiler:ocaml-win-conf _:build prefix bin _:lib]
+]
+install: [
+  ["./install.sh" version compiler:cc _:build prefix _:lib]
+]
+flags: light-uninstall
+remove: [
+  ["rm" "-rf" _:lib]
+]
+patches: [
+  "tk8.4.20-msvc64.patch" # Technically, only required for MSVC64 building
+  "tk8.4.20-mingw.patch"  # Technically, only required for MinGW-w64 building
+]
+substs: "win32-tcl-tk.install"
+extra-sources: [
+  "https://sourceforge.net/projects/tcl/files/Tcl/8.4.20/tcl8.4.20-src.tar.gz/download" {"tcl8.4.20-src.tar.gz"} "b57ecc6540026fd4a83288ac6bf2b02b"
+]
+url {
+  src: "https://sourceforge.net/projects/tcl/files/Tcl/8.4.20/tk8.4.20-src.tar.gz/download"
+  checksum: "7183ced20a9985e2fb39cd7fb3a3882b"
+}

@@ -1,0 +1,121 @@
+This patch minimally back-ports Jan Nijtmans fix for MinGW-w64 3.0
+
+See http://core.tcl.tk/tcl/info/7488de4f4b203a7f for the original commit.
+
+diff -Naur a/win/tclWin32Dll.c b/win/tclWin32Dll.c
+--- a/win/tclWin32Dll.c	2012-04-04 14:50:53.000000000 +0100
++++ b/win/tclWin32Dll.c	2016-06-18 09:19:52.159183600 +0100
+@@ -44,14 +44,14 @@
+  * record.
+  */
+ 
+-typedef struct EXCEPTION_REGISTRATION {
+-    struct EXCEPTION_REGISTRATION* link;
++typedef struct TCLEXCEPTION_REGISTRATION {
++    struct TCLEXCEPTION_REGISTRATION* link;
+     EXCEPTION_DISPOSITION (*handler)( struct _EXCEPTION_RECORD*, void*,
+ 				      struct _CONTEXT*, void* );
+     void* ebp;
+     void* esp;
+     int status;
+-} EXCEPTION_REGISTRATION;
++} TCLEXCEPTION_REGISTRATION;
+ 
+ #endif
+ 
+@@ -285,7 +285,7 @@
+     LPVOID reserved;		/* Not used. */
+ {
+ #if defined(HAVE_NO_SEH) && !defined(_WIN64)
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+ 
+     switch (reason) {
+@@ -530,7 +530,7 @@
+ {
+ 
+ #if defined(HAVE_NO_SEH) && !defined(__WIN64__)
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+     int retval = 0;
+ 
+@@ -1102,7 +1102,7 @@
+ 
+ #   else
+ 
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ 
+     /*
+      * Execute the CPUID instruction with the given index, and store results
+diff -Naur a/win/tclWinChan.c b/win/tclWinChan.c
+--- a/win/tclWinChan.c	2012-04-04 14:50:53.000000000 +0100
++++ b/win/tclWinChan.c	2016-06-18 09:20:16.268558600 +0100
+@@ -132,14 +132,14 @@
+  * record.
+  */
+ 
+-typedef struct EXCEPTION_REGISTRATION {
+-    struct EXCEPTION_REGISTRATION* link;
++typedef struct TCLEXCEPTION_REGISTRATION {
++    struct TCLEXCEPTION_REGISTRATION* link;
+     EXCEPTION_DISPOSITION (*handler)( struct _EXCEPTION_RECORD*, void*,
+ 				      struct _CONTEXT*, void* );
+     void* ebp;
+     void* esp;
+     int status;
+-} EXCEPTION_REGISTRATION;
++} TCLEXCEPTION_REGISTRATION;
+ 
+ #endif
+ 
+@@ -963,7 +963,7 @@
+                                  * TCL_WRITABLE to indicate file mode. */
+ {
+ #if defined(HAVE_NO_SEH) && !defined(_WIN64)
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+     char channelName[16 + TCL_INTEGER_SPACE];
+     Tcl_Channel channel = NULL;
+diff -Naur a/win/tclWinFCmd.c b/win/tclWinFCmd.c
+--- a/win/tclWinFCmd.c	2012-11-19 16:27:16.000000000 +0000
++++ b/win/tclWinFCmd.c	2016-06-18 09:21:00.737308600 +0100
+@@ -80,14 +80,14 @@
+  * record.
+  */
+ 
+-typedef struct EXCEPTION_REGISTRATION {
+-    struct EXCEPTION_REGISTRATION* link;
++typedef struct TCLEXCEPTION_REGISTRATION {
++    struct TCLEXCEPTION_REGISTRATION* link;
+     EXCEPTION_DISPOSITION (*handler)( struct _EXCEPTION_RECORD*, void*,
+ 				      struct _CONTEXT*, void* );
+     void* ebp;
+     void* esp;
+     int status;
+-} EXCEPTION_REGISTRATION;
++} TCLEXCEPTION_REGISTRATION;
+ 
+ #endif
+ 
+@@ -181,7 +181,7 @@
+ 				 * (native). */
+ {    
+ #if defined(HAVE_NO_SEH) && !defined(_WIN64)
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+     DWORD srcAttr, dstAttr;
+     int retval = -1;
+@@ -555,7 +555,7 @@
+    CONST TCHAR *nativeDst)	/* Pathname of file to copy to (native). */
+ {
+ #if defined(HAVE_NO_SEH) && !defined(_WIN64)
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+     int retval = -1;
+ 

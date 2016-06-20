@@ -1,0 +1,34 @@
+This patch minimally back-ports Jan Nijtmans fix for MinGW-w64 3.0
+
+See http://core.tcl.tk/tk/info/868e2e928347b8df for the original commit.
+
+diff -Naur a/win/tkWin32Dll.c b/win/tkWin32Dll.c
+--- a/win/tkWin32Dll.c	2012-11-19 17:35:56.000000000 +0000
++++ b/win/tkWin32Dll.c	2016-06-18 09:26:28.073341100 +0100
+@@ -20,14 +20,14 @@
+  * them by creating an EXCEPTION_REGISTRATION within the activation record.
+  */
+ 
+-typedef struct EXCEPTION_REGISTRATION {
+-    struct EXCEPTION_REGISTRATION *link;
++typedef struct TCLEXCEPTION_REGISTRATION {
++    struct TCLEXCEPTION_REGISTRATION *link;
+     EXCEPTION_DISPOSITION (*handler)(
+ 	    struct _EXCEPTION_RECORD*, void*, struct _CONTEXT*, void*);
+     void *ebp;
+     void *esp;
+     int status;
+-} EXCEPTION_REGISTRATION;
++} TCLEXCEPTION_REGISTRATION;
+ 
+ /*
+  * Need to add noinline flag to DllMain declaration so that gcc -O3 does not
+@@ -102,7 +102,7 @@
+     LPVOID reserved;
+ {
+ #ifdef HAVE_NO_SEH
+-    EXCEPTION_REGISTRATION registration;
++    TCLEXCEPTION_REGISTRATION registration;
+ #endif
+ 
+     /*
