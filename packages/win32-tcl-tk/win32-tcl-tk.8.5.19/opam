@@ -1,0 +1,29 @@
+opam-version: "2.0"
+descr: """
+Tcl/Tk Library and Shell
+"""
+authors: ["John Ousterhout" "Tcl Core Team"]
+maintainer: "David Allsopp <david.allsopp@metastack.com>"
+bug-reports: "https://github.com/ocaml/windows-native/issues"
+dev-repo: "http://core.tcl.tk"
+homepage: "http://tcl.tk"
+depends: "compiler"
+available: os = "win32"
+build: [
+  ["./build.sh" version compiler:ocaml-win-conf _:build prefix bin _:lib]
+]
+install: [
+  ["./install.sh" version compiler:cc _:build prefix _:lib]
+]
+flags: light-uninstall
+remove: [
+  ["rm" "-rf" _:lib]
+]
+substs: "win32-tcl-tk.install"
+extra-sources: [
+  "https://sourceforge.net/projects/tcl/files/Tcl/8.5.19/tcl8.5.19-src.tar.gz/download" {"tcl8.5.19-src.tar.gz"} "4f4e1c919f6a6dbb37e9a12d429769a6"
+]
+url {
+  src: "https://sourceforge.net/projects/tcl/files/Tcl/8.5.19/tk8.5.19-src.tar.gz/download"
+  checksum: "e89df710447cce0fc0bde65667c12f85"
+}
