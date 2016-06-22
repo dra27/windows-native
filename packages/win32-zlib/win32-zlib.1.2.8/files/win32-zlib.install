@@ -1,0 +1,9 @@
+bin: "zlib1.dll"
+lib: [
+  "?libz.a"
+  "?libz.dll.a"
+  "?zdll.lib"
+  "?zlib.lib"
+  "zconf.h"
+  "zlib.h"
+]

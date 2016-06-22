@@ -1,0 +1,21 @@
+opam-version: "2.0"
+descr: """
+zlib - A Massively Spiffy Yet Delicately Unobtrusive Compression Library
+"""
+authors: ["Mark Adler" "Jean-loup Gailly"]
+maintainer: "David Allsopp <david.allsopp@metastack.com>"
+bug-reports: "https://github.com/madler/zlib/issues"
+dev-repo: "git+https://github.com/madler/zlib"
+homepage: "http://zlib.net"
+depends: "compiler"
+available: os = "win32"
+build: [
+  [make "-f" "win32/Makefile.gcc" "PREFIX=x86_64-w64-mingw32-" "CFLAGS=-DNO_UNDERLINE" "LOC=-DASMV" "OBJA=contrib/amd64/amd64-match.o" "libz.a" "zlib1.dll" "libz.dll.a"] {compiler:cc = "cc" & compiler:target-arch = "x86_64"}
+  [make "-f" "win32/Makefile.gcc" "PREFIX=i686-w64-mingw32-" "LOC=-DASMINF -DASMV -I." "OBJA=contrib/inflate86/inffas86.o contrib/asm686/match.o" "libz.a" "zlib1.dll" "libz.dll.a"] {compiler:cc = "cc" & compiler:target-arch = "i686"}
+  ["nmake" "-nologo" "-f" "win32\\Makefile.msc" "AS=ml64" "LOC=-DASMV -DASMINF -I." "OBJA=inffasx64.obj gvmat64.obj inffas8664.obj" "zlib.lib" "zlib1.dll" "zdll.lib"] {compiler:cc = "cl" & compiler:target-arch = "x86_64"}
+  ["nmake" "-nologo" "-f" "win32\\Makefile.msc" "LOC=-DASMV -DASMINF" "OBJA=inffas32.obj match686.obj" "zlib.lib" "zlib1.dll" "zdll.lib"] {compiler:cc = "cl" & compiler:target-arch = "i686"}
+]
+url {
+  src: "http://zlib.net/zlib-1.2.8.tar.gz"
+  checksum: "44d667c142d7cda120332623eab69f40"
+}
