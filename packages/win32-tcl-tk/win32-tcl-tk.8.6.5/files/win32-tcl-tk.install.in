@@ -1,0 +1,8 @@
+bin: [
+  # Tcl Binaries
+  "tcl%{version}%/win/tcl86.dll"
+  "tcl%{version}%/win/tclsh86.exe"
+  # Tk Binaries
+  "win/tk86.dll"
+  "win/wish86.exe"
+]
